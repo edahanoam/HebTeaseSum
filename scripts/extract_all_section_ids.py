@@ -27,7 +27,6 @@ from fetch import build_title_url, extract_issu_ids, extract_sect_ids, build_iss
 
 
 if __name__ == "__main__":
-
     # Parse command line arguments
     args = docopt(__doc__)
     inp_fn = Path(args["--in"])
