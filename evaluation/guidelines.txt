@@ -1,0 +1,24 @@
+In this task you will evaluate the quality of summaries written for a news article.
+To correctly solve this task, follow these steps:
+1. Carefully read the news article(s), be aware of the information it contains.
+2. Read the proposed summary
+3. Rate each summary on a scale from 1 (worst) to 5 (best) by its relevance, consistency, fluency, and coherence.
+
+
+Definitions:
+
+Relevance:
+The rating measures how well the summary captures the key points of the article.
+Consider whether all and only the important aspects are contained in the summary. When multiple articles are presented, the score should account for the most important information across all sources.
+
+Consistency:
+The rating measures whether the facts in the summary are consistent with the facts in the original article.
+Consider whether the summary does reproduce all facts accurately and does not make up untrue information.
+
+Fluency:
+This rating measures the quality of individual sentences, are they well-written and grammatically correct.
+Consider the quality of individual sentences.
+
+Coherence:
+The rating measures the quality of all sentences collectively, to the fit together and sound naturally.
+Consider the quality of the summary as a whole.
