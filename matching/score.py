@@ -87,10 +87,6 @@ def bertscore_similarity(input_file_all_texts,input_file_candidates, output_json
     #counter = 0
     with open(input_file_candidates, "r", encoding="utf-8") as f_in, open(output_jsonl, "w", encoding="utf-8") as f_out:
         for line in f_in:
-            #counter += 1
-
-            # if counter == 10:
-            #     break
 
             if line.strip():
                 data = json.loads(line)
