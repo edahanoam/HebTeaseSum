@@ -98,10 +98,8 @@ def sample_and_tag(input_file_all_texts, input_file_candidates, num_sample, to_p
             writer.writerow([key, value])
 
 if __name__ == '__main__':
-    #this program supposed to get a jsonl with the candidates and the
     arguments = docopt(__doc__, version='Filter JSONL 1.0')
     input_file_candidates = Path(arguments['--in_m'])
-    #this is file after we kept only relevan rows
     input_file_all_texts = Path(arguments['--in_t'])
     num_sample=int(arguments['--n'])
     sample_and_tag(input_file_all_texts,input_file_candidates,num_sample)
