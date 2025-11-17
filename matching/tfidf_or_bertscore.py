@@ -2,7 +2,6 @@
     <file-name> --in_t=TEXT_OF_CANDIDATES --in_m=matching_if_files --method=METHOD_NUM --out=OUTFILE[--debug]
 
 """
-
 import os
 import json
 from docopt import docopt
@@ -15,11 +14,9 @@ from bert_score import score
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer, losses, InputExample,util
 from torch.utils.data import DataLoader
-
 from utils import load_text_and_ids, first_n_words
 import csv
-import ast  # To safely convert string list to actual list
-
+import ast  
 import torch
 
 
@@ -34,8 +31,6 @@ def hebrew_tokenizer(text):
 
 def tfidf(input_file_all_texts):
     documents,doc_ids=load_text_and_ids(input_file_all_texts)
-
-
     vectorizer = TfidfVectorizer(tokenizer=hebrew_tokenizer, lowercase=False)
     tfidf_matrix = vectorizer.fit_transform(documents)
     print(tfidf_matrix.shape)
@@ -43,16 +38,14 @@ def tfidf(input_file_all_texts):
 
 
 def tf_idf_cosine(tfidf_matrix, doc_ids,input_file_candidates,output_jsonl):
-    # tfidf_matrix = np.array(tfidf_matrix)
     with open(input_file_candidates, "r", encoding="utf-8") as f_in, open(output_jsonl, "w", encoding="utf-8") as f_out:
         for line in f_in:
             if line.strip():
                 data = json.loads(line)
                 main_doc, related_docs = list(data.items())[0]  # Extract key and list
 
-                # Find index of the main document in doc_ids
                 if main_doc not in doc_ids:
-                    continue  # Skip if the document is missing
+                    continue  
 
                 main_index = doc_ids.index(main_doc)
                 if not main_index:
@@ -71,7 +64,6 @@ def tf_idf_cosine(tfidf_matrix, doc_ids,input_file_candidates,output_jsonl):
                         similarity = cosine_similarity(main_vector, related_vector)[0][0]
                         results.append((related_doc, round(similarity, 4)))
 
-                # Save results as JSONL
                 f_out.write(json.dumps({main_doc: results}, ensure_ascii=False) + "\n")
 
     print(f"Cosine similarity computed and saved to {output_jsonl}")
@@ -81,10 +73,8 @@ def tf_idf_cosine(tfidf_matrix, doc_ids,input_file_candidates,output_jsonl):
 
 
 def bertscore_similarity(input_file_all_texts,input_file_candidates, output_jsonl):
-    """Compute similarity using BERTScore F1 instead of cosine similarity."""
+    """Compute similarity using BERTScore F1"""
     documents,doc_ids=load_text_and_ids(input_file_all_texts)
-
-    #counter = 0
     with open(input_file_candidates, "r", encoding="utf-8") as f_in, open(output_jsonl, "w", encoding="utf-8") as f_out:
         for line in f_in:
 
@@ -112,15 +102,12 @@ def bertscore_similarity(input_file_all_texts,input_file_candidates, output_json
                 P, R, F1 = score(
                     [main_text] * len(related_texts),
                     related_texts,
-                    model_type="bert-base-multilingual-cased",  # ✅ Supported model
-                    rescale_with_baseline=False,  # ✅ Allowed for this model
-                    lang="he"  # ✅ Required when using a supported model with baseline
+                    model_type="bert-base-multilingual-cased", 
+                    rescale_with_baseline=False,  
+                    lang="he" 
                 )
 
-                # Store results with F1 score
                 results = [(related_doc_ids[i], round(F1[i].item(), 4)) for i in range(len(related_doc_ids))]
-
-                # Save results to output JSONL
                 f_out.write(json.dumps({main_doc: results}, ensure_ascii=False) + "\n")
 
     print(f"BERTScore similarity computed and saved to {output_jsonl}")
@@ -130,12 +117,9 @@ def embedding_similarity(input_file_all_texts, input_file_candidates, output_jso
                          model_path="setfit_finetuned_cosine"):
     """Compute similarity using fine-tuned SentenceTransformer embeddings and cosine similarity."""
 
-    # Load fine-tuned model
     model = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v2", cache_folder="/tmp/huggingface_cache")
-
     documents,doc_ids=load_text_and_ids(input_file_all_texts)
 
-    # Compute embeddings for all documents
     document_embeddings = model.encode(documents, convert_to_tensor=True)
 
     with open(input_file_candidates, "r", encoding="utf-8") as f_in, open(output_jsonl, "w", encoding="utf-8") as f_out:
@@ -163,19 +147,13 @@ def embedding_similarity(input_file_all_texts, input_file_candidates, output_jso
                         related_embeddings.append(document_embeddings[related_index])
 
                 if not related_embeddings:
-                    continue  # Skip if no valid related texts
+                    continue  
 
-                # Convert list of tensors to a single tensor
                 related_embeddings = torch.stack(related_embeddings)
-
-                # Compute cosine similarity
                 similarity_scores = util.pytorch_cos_sim(main_embedding, related_embeddings).squeeze(0)
 
-                # Store results with similarity score
                 results = [(related_doc_ids[i], round(similarity_scores[i].item(), 4)) for i in
                            range(len(related_doc_ids))]
-
-                # Save results to output JSONL
                 f_out.write(json.dumps({main_doc: results}, ensure_ascii=False) + "\n")
 
     print(f"Embedding-based similarity computed and saved to {output_jsonl}")
@@ -184,7 +162,6 @@ def embedding_similarity(input_file_all_texts, input_file_candidates, output_jso
 
 
 if __name__ == '__main__':
-    #this program supposed to get a jsonl with the candidates and the
     arguments = docopt(__doc__, version='Filter JSONL 1.0')
     input_file_candidates = Path(arguments['--in_m'])
     #this is file after we kept only relevan rows
