@@ -107,9 +107,7 @@ def run_on_test_files():
     df2 = pd.read_csv('TestunrelatedSample.csv')
     df2.columns = ['summaryID', 'text_candidateID']
     df2['Class'] = 0
-    # Combine the DataFrames
     df_combined = pd.concat([df1, df2], ignore_index=True)
-    # Shuffle the rows
     df_shuffled = df_combined.sample(frac=1, random_state=42).reset_index()
     print(df_shuffled.columns)
     df = add_texts(documents, ids,df_shuffled)
