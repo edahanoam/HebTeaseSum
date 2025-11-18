@@ -13,6 +13,6 @@
 
 3. Download the raw XML and build the dataset
 ```
-python get_dataset.py --in=$JSONl_FILE --out=$FOLDER_FOR_XMLS --timeout=1 --debug
+python datacollector/get_dataset.py --in=$JSONl_FILE --out=$FOLDER_FOR_XMLS --timeout=1 --debug
 ```
 
