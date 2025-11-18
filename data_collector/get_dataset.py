@@ -143,6 +143,12 @@ def get_all_to_download(inp_fn):
             summary_ids.add(obj["summary_id"])
             for tid in obj["text_ids"]:
                 article_ids.add(tid)
+    
+    all= list(summary_ids | article_ids)
+    print(len(all))
+    return all
+
+    
 
 
 def get_xml_list(inp_fn,out_dir):
