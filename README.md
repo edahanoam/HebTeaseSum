@@ -16,4 +16,3 @@
 python get_dataset.py --in=$JSONl_FILE --out=$FOLDER_FOR_XMLS --timeout=1 --debug
 ```
 
-
