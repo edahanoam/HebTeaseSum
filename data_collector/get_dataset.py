@@ -145,7 +145,6 @@ def get_all_to_download(inp_fn):
                 article_ids.add(tid)
     
     all= list(summary_ids | article_ids)
-    print(len(all))
     return all
 
     
