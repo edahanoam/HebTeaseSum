@@ -3,7 +3,7 @@
 """
 import json
 import logging
-import tqdm
+from tqdm import tqdm
 from docopt import docopt
 from pathlib import Path
 import requests
