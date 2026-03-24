@@ -5,7 +5,7 @@
 1. Install requirements:
 ```pip install -r requirements.txt```
 
-2. Choose the waned portion of HebTeaseSum from the metadata/ directory
+2. Choose the wanted portion of HebTeaseSum from the metadata/ directory
 - **singleDoc.jsonl** All summaries corresponding to a single article  
 - **multiDoc.jsonl** Summaries created from multiple related articles  
 - **singleDoc_over50.jsonl** Summaries with at least 50 words, rated as the highest-quality summaries by human annotators  
