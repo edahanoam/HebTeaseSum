@@ -1,4 +1,4 @@
-"""OCR text correction using OpenAI-compatible API (OpenAI or Gemini)."""
+""" prompt-base OCR post correction """
 
 import os
 import asyncio
